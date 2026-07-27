@@ -1,86 +1,85 @@
-import MangaList from '../models/User.model.js'
+import { UserList } from '../models/AnimeListEntry.model.js';
 
-// Obtener la lista de mangas de un usuario
-export const getMangaList = async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const mangaList = await MangaList.findOne({ user: userId }).populate('mangas');
-        if (!mangaList) {
-            return res.status(404).json({ message: 'Manga list not found' });
+const añadirMangaALista = async (req, res) => {
+    const { userId, mangaId, mangaTitle, mangaCoverImage, lista} = req.body;
+    //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
+    try{
+        const userList = await UserList.findOne({ userId });
+        if (!userList) {
+            const newUserList = new UserList({
+                userId,
+                completado: lista === 'completado' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : [],
+                enProgreso: lista === 'enProgreso' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : [],
+                planToWatch: lista === 'planToWatch' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : [],
+                dropped: lista === 'dropped' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : []
+            });
+            await newUserList.save();
+            return res.status(201).json({ message: 'Manga added to the list successfully.' });
         }
-        res.status(200).json(mangaList);
+        if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
+            return res.status(400).json({ error: 'Invalid list name provided.' });
+        }
+        if (userList[lista].some(manga => manga.mangaid === mangaId)) {
+            return res.status(400).json({ error: 'Manga already exists in the specified list.' });
+        }
+        
+        userList[lista].push({
+            mangaid: mangaId,
+            mangaTitle,
+            mangaCoverImage
+        });
+        await userList.save();
+        return res.status(200).json({ message: 'Manga added to the list successfully.' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred while adding the manga to the list.' });
     }
 };
 
-// Agregar un manga a la lista de un usuario
-export const addMangaToList = async (req, res) => {
+const obtenerListaUsuario = async (req, res) => {
     const { userId } = req.params;
-    const { mangaId } = req.body;
     try {
-        let mangaList = await MangaList.findOne({ user: userId });
-        if (!mangaList) {
-            mangaList = new MangaList({ user: userId, mangas: [] });
+        const userList = await UserList.findOne({ userId });
+        if (!userList) {
+            return res.status(404).json({ error: 'User list not found.' });
         }
-        if (mangaList.mangas.includes(mangaId)) {
-            return res.status(400).json({ message: 'Manga already in list' });
-        }
-        mangaList.mangas.push(mangaId);
-        await mangaList.save();
-        res.status(200).json({ message: 'Manga added to list' });
+        return res.status(200).json(userList);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred while retrieving the user list.' });
     }
 };
 
-// Eliminar un manga de la lista de un usuario
-export const removeMangaFromList = async (req, res) => {
-    const { userId } = req.params;
-    const { mangaId } = req.body;
+const eliminarMangaDeLista = async (req, res) => {
+    const { userId, mangaId, lista } = req.body;
+    //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
     try {
-        const mangaList = await MangaList.findOne({ user: userId });
-        if (!mangaList) {
-            return res.status(404).json({ message: 'Manga list not found' });
+        const userList = await UserList.findOne({ userId });
+        if (!userList) {
+            return res.status(404).json({ error: 'User list not found.' });
         }
-        mangaList.mangas = mangaList.mangas.filter(id => id.toString() !== mangaId);
-        await mangaList.save();
-        res.status(200).json({ message: 'Manga removed from list' });
-    }
-        catch (error) { 
-        res.status(500).json({ message: 'Server error' });
-    }
-};
-
-// Obtener el estado de un manga en la lista de un usuario
-export const getMangaStatus = async (req, res) => {
-    const { userId, mangaId } = req.params;
-    try {
-        const mangaList = await MangaList.findOne({ user: userId });
-        if (!mangaList) {
-            return res.status(404).json({ message: 'Manga list not found' });
+        if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
+            return res.status(400).json({ error: 'Invalid list name provided.' });
         }
-        const isInList = mangaList.mangas.includes(mangaId);
-        res.status(200).json({ inList: isInList });
-    }
-        catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
-};
-
-// Vaciar la lista de mangas de un usuario
-export const clearMangaList = async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const mangaList = await MangaList.findOne({ user: userId });
-        if (!mangaList) {
-            return res.status(404).json({ message: 'Manga list not found' });
+        if (lista === 'completado' && !userList.completado.some(manga => manga.mangaid === mangaId)) {
+            return res.status(404).json({ error: 'Manga not found in the completed list.' });
         }
-        mangaList.mangas = [];
-        await mangaList.save();
-        res.status(200).json({ message: 'Manga list cleared' });
+        if (lista === 'enProgreso' && !userList.enProgreso.some(manga => manga.mangaid === mangaId)) {
+            return res.status(404).json({ error: 'Manga not found in the in-progress list.' });
+        }
+        if (lista === 'planToWatch' && !userList.planToWatch.some(manga => manga.mangaid === mangaId)) {
+            return res.status(404).json({ error: 'Manga not found in the plan to watch list.' });
+        }
+        if (lista === 'dropped' && !userList.dropped.some(manga => manga.mangaid === mangaId)) {
+            return res.status(404).json({ error: 'Manga not found in the dropped list.' });
+        }
+        userList[lista] = userList[lista].filter(manga => manga.mangaid !== mangaId);
+        await userList.save();
+        return res.status(200).json({ message: 'Manga removed from the list successfully.' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred while removing the manga from the list.' });
     }
 };
 
+export { añadirMangaALista, obtenerListaUsuario, eliminarMangaDeLista };

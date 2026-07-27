@@ -1,12 +1,10 @@
 import express from 'express';
-import {addMangaToList,clearMangaList,getMangaList,removeMangaFromList} from '../controllers/mangaList.controller.js';
+import { añadirMangaALista, obtenerListaUsuario, eliminarMangaDeLista } from '../controllers/mangaList.controller.js';
 
+const router = express.Router();    
 
-const router = express.Router()
+router.post('/add', añadirMangaALista);
+router.get('/:userId', obtenerListaUsuario);
+router.delete('/remove', eliminarMangaDeLista);
 
-router.get('/:userId', getMangaList);
-router.post('/:userId/add', addMangaToList);
-router.post('/:userId/remove', removeMangaFromList);
-router.post('/:userId/clear', clearMangaList);
-
-export default router
+export default router;

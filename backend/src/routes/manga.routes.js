@@ -1,13 +1,9 @@
 import express from 'express';
-import { addManga,getMangas, getMangaById } from '../controllers/manga.controller.js';
+import { obtenerMangas } from '../controllers/manga.controller.js';
 
 
-const router = express.Router()
+const router = express.Router();
 
-router.post("/", addManga);
-router.get("/", getMangas);
-router.get("/:mangaId", getMangaById);
+router.get("/", obtenerMangas);
 
-
-
-export default router
+export default router;

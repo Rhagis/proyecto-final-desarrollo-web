@@ -22,7 +22,7 @@ export const login = async (req, res) => {
             sameSite: 'strict',
             maxAge: 36000000
         });
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Login successful', token, user: { id: user._id, username: user.username, email: user.email } });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
         console.log(error)

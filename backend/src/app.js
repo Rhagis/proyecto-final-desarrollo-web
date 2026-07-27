@@ -17,13 +17,8 @@ app.use("/mangas", mangasRoutes);
 app.use("/anime", animeRoutes);
 app.use("/anime-list", animeListRoutes);
 
-
-
 app.get("/", (req, res) => {
     res.send("API funcionando");
 });
-
-
-
 
 export default app
