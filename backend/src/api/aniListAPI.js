@@ -88,10 +88,11 @@ try {
 }
 catch(error){
     console.error('Error fetching anime list:', error);
+    throw error;
 }
 };
     
-const getMangaList = async (page = 2, perPage = 10) => {
+const getMangaList = async (page = 1, perPage = 10) => {
     try {
         const query = `
         query ($page: Int, $perPage: Int) {
@@ -176,6 +177,7 @@ const getMangaList = async (page = 2, perPage = 10) => {
     }
     catch(error){
         console.error('Error fetching manga list:', error);
+        throw error;
     }
 };
 

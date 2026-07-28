@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema(
   {
     username: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         unique: true,
-        trim: true
+        ref: 'User'
     },
     email: {
         type: String,
@@ -18,64 +18,9 @@ const userSchema = new mongoose.Schema(
         type: String,
         required: true
     },
-    mangaList: {
-        mangaCompletado: [{
-            mangaid: {
-                type: Number,
-                required: true
-            },
-            mangaTitle: {
-                type: String,
-                required: true
-            },
-            mangaCoverImage: {
-                type: String,
-                required: true
-            }
-        }],
-        mangaEnProgreso: [{
-            mangaid: {
-                type: Number,
-                required: true
-            },
-            mangaTitle: {
-                type: String,
-                required: true
-            },
-            mangaCoverImage: {
-                type: String,
-                required: true
-            }
-        }],
-        mangaPlanToRead: [{
-            mangaid: {
-                type: Number,
-                required: true
-            },
-            mangaTitle: {
-                type: String,
-                required: true
-            },
-            mangaCoverImage: {
-                type: String,
-                required: true
-            }
-        }],
-        mangaDropped: [{
-            mangaid: {
-                type: Number,
-                required: true
-            },
-            mangaTitle: {
-                type: String,
-                required: true
-            },
-            mangaCoverImage: {
-                type: String,
-                required: true
-            }
-        }]
-    }
+    
+        
+    
   },
     {
         timestamps: true
