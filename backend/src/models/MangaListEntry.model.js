@@ -2,8 +2,10 @@ import mongoose from "mongoose";
 
 const mangaListSchema = new mongoose.Schema({
     userId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true
     },
     mangaCompletado: [{
         mangaid: {

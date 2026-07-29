@@ -8,6 +8,9 @@ const listasPermitidas = [
 ]
 
 const añadirAnimeALista = async (req, res) => {
+    if(!listasPermitidas.includes(req.body.lista)) {
+        return res.status(400).json({ error: 'Invalid list name provided.' });
+    }
     const { userId, animeId, animeTitle, animeCoverImage, lista} = req.body;
     //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
     try{
@@ -15,10 +18,10 @@ const añadirAnimeALista = async (req, res) => {
         if (!userList) {
             const newUserList = new AnimeList({
                 userId,
-                animeCompletado: lista === 'completado' ? [{ animeid: animeId, animeTitle, animeCoverImage }] : [],
-                animeEnProgreso: lista === 'enProgreso' ? [{ animeid: animeId, animeTitle, animeCoverImage }] : [],
-                animePlanToWatch: lista === 'planToWatch' ? [{ animeid: animeId, animeTitle, animeCoverImage }] : [],
-                animeDropped: lista === 'dropped' ? [{ animeid: animeId, animeTitle, animeCoverImage }] : []
+                animeCompletado: lista === 'completado' ? [{ animeid: Number(animeId), animeTitle, animeCoverImage }] : [],
+                animeEnProgreso: lista === 'enProgreso' ? [{ animeid: Number(animeId), animeTitle, animeCoverImage }] : [],
+                animePlanToWatch: lista === 'planToWatch' ? [{ animeid: Number(animeId), animeTitle, animeCoverImage }] : [],
+                animeDropped: lista === 'dropped' ? [{ animeid: Number(animeId), animeTitle, animeCoverImage }] : []
             });
             await newUserList.save();
             return res.status(201).json({ message: 'Anime added to the list successfully.' });
@@ -33,12 +36,12 @@ const añadirAnimeALista = async (req, res) => {
             dropped: 'animeDropped'
         };
         const listaKey = listaMap[lista];
-        if (userList[listaKey].some(anime => anime.animeid === animeId)) {
+        if (userList[listaKey].some(anime => anime.animeid === Number(animeId))) {
             return res.status(400).json({ error: 'Anime already exists in the specified list.' });
         }
         
         userList[listaKey].push({
-            animeid: animeId,
+            animeid: Number(animeId),
             animeTitle,
             animeCoverImage
         });
@@ -78,26 +81,26 @@ const eliminarAnimeDeLista = async (req, res) => {
         if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
             return res.status(400).json({ error: 'Invalid list name provided.' });
         }
-        if (lista === 'completado' && !userList.animeCompletado.some(anime => anime.animeid === animeId)) {
+        if (lista === 'completado' && !userList.animeCompletado.some(anime => anime.animeid === Number(animeId))) {
             return res.status(404).json({ error: 'Anime not found in the completed list.' });
         }
-        if (lista === 'enProgreso' && !userList.animeEnProgreso.some(anime => anime.animeid === animeId)) {
+        if (lista === 'enProgreso' && !userList.animeEnProgreso.some(anime => anime.animeid === Number(animeId))) {
             return res.status(404).json({ error: 'Anime not found in the in-progress list.' });
         }
-        if (lista === 'planToWatch' && !userList.animePlanToWatch.some(anime => anime.animeid === animeId)) {
+        if (lista === 'planToWatch' && !userList.animePlanToWatch.some(anime => anime.animeid === Number(animeId))) {
             return res.status(404).json({ error: 'Anime not found in the plan to watch list.' });
         }
-        if (lista === 'dropped' && !userList.animeDropped.some(anime => anime.animeid === animeId)) {
+        if (lista === 'dropped' && !userList.animeDropped.some(anime => anime.animeid === Number(animeId))) {
             return res.status(404).json({ error: 'Anime not found in the dropped list.' });
         }
         if (lista === 'completado') {
-            userList.animeCompletado = userList.animeCompletado.filter(anime => anime.animeid !== animeId);
+            userList.animeCompletado = userList.animeCompletado.filter(anime => anime.animeid !== Number(animeId));
         } else if (lista === 'enProgreso') {
-            userList.animeEnProgreso = userList.animeEnProgreso.filter(anime => anime.animeid !== animeId);
+            userList.animeEnProgreso = userList.animeEnProgreso.filter(anime => anime.animeid !== Number(animeId));
         } else if (lista === 'planToWatch') {
-            userList.animePlanToWatch = userList.animePlanToWatch.filter(anime => anime.animeid !== animeId);
+            userList.animePlanToWatch = userList.animePlanToWatch.filter(anime => anime.animeid !== Number(animeId));
         } else if (lista === 'dropped') {
-            userList.animeDropped = userList.animeDropped.filter(anime => anime.animeid !== animeId);
+            userList.animeDropped = userList.animeDropped.filter(anime => anime.animeid !== Number(animeId));
         }
         await userList.save();
         return res.status(200).json({ message: 'Anime removed from the list successfully.' });

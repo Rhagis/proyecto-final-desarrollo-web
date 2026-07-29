@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema(
   {
     username: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
         unique: true,
-        ref: 'User'
+        trim: true
     },
     email: {
         type: String,

@@ -1,7 +1,8 @@
 import { getMangaList } from '../api/aniListAPI.js';
 
 export const obtenerMangas = async (req, res) => {
-    const { page, perPage } = req.query;
+    const page = Number(req.query.page) || 1;
+    const perPage = Number(req.query.perPage) || 50;
     try {
         const mangas = await getMangaList(page, perPage);
         res.status(200).json(mangas);
