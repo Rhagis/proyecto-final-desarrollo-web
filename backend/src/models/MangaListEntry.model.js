@@ -35,7 +35,7 @@ const mangaListSchema = new mongoose.Schema({
             required: true
         },    
     }],
-    mangaPlanToWatch: [{
+    mangaPlanToRead: [{
         mangaid: {
             type: Number,
             required: true

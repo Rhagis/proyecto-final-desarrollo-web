@@ -12,9 +12,13 @@ const añadirAnimeALista = async (req, res) => {
         return res.status(400).json({ error: 'Invalid list name provided.' });
     }
     const { userId, animeId, animeTitle, animeCoverImage, lista} = req.body;
+    if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
+            return res.status(400).json({ error: 'Invalid list name provided.' });
+        }
     //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
     try{
         const userList = await AnimeList.findOne({ userId });
+        
         if (!userList) {
             const newUserList = new AnimeList({
                 userId,
@@ -26,9 +30,7 @@ const añadirAnimeALista = async (req, res) => {
             await newUserList.save();
             return res.status(201).json({ message: 'Anime added to the list successfully.' });
         }
-        if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
-            return res.status(400).json({ error: 'Invalid list name provided.' });
-        }
+        
         const listaMap = {
             completado: 'animeCompletado',
             enProgreso: 'animeEnProgreso',
