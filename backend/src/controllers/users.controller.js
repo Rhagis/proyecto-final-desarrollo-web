@@ -6,6 +6,9 @@ import bcrypt from 'bcrypt'
 export const login = async (req, res) => {
     const { username, password } = req.body;
     try {
+        if (!username || !password) {
+            return res.status(400).json({ message: 'Username and password are required' });
+        }
         const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -39,6 +42,9 @@ export const register = async (req, res) => {
         }
         if (await User.findOne({ email })) {
             return res.status(400).json({ message: 'Email already in use' });
+        }
+        if(!password || !username || !email){
+            return res.status(400).json({ message: 'All fields are required' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ username, email, password: hashedPassword });

@@ -12,6 +12,9 @@ const añadirAnimeALista = async (req, res) => {
         return res.status(400).json({ error: 'Invalid list name provided.' });
     }
     const { userId, animeId, animeTitle, animeCoverImage, lista} = req.body;
+    if(!userId || !animeId || !animeTitle || !animeCoverImage || !lista) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
     if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
             return res.status(400).json({ error: 'Invalid list name provided.' });
         }

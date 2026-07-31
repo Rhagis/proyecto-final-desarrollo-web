@@ -13,15 +13,18 @@ const añadirMangaALista = async (req, res) => {
     }
     const { userId, mangaId, mangaTitle, mangaCoverImage, lista} = req.body;
     //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
+    if(!userId || !mangaId || !mangaTitle || !mangaCoverImage || !lista) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
     try{
         const userList = await MangaList.findOne({ userId });
         if (!userList) {
             const newUserList = new MangaList({
                 userId,
-                mangaCompletado: lista === 'completado' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : [],
-                mangaEnProgreso: lista === 'enProgreso' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : [],
-                mangaPlanToRead: lista === 'planToRead' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : [],
-                mangaDropped: lista === 'dropped' ? [{ mangaid: mangaId, mangaTitle, mangaCoverImage }] : []
+                mangaCompletado: lista === 'completado' ? [{ mangaid: Number(mangaId), mangaTitle, mangaCoverImage }] : [],
+                mangaEnProgreso: lista === 'enProgreso' ? [{ mangaid: Number(mangaId), mangaTitle, mangaCoverImage }] : [],
+                mangaPlanToRead: lista === 'planToRead' ? [{ mangaid: Number(mangaId), mangaTitle, mangaCoverImage }] : [],
+                mangaDropped: lista === 'dropped' ? [{ mangaid: Number(mangaId), mangaTitle, mangaCoverImage }] : []
             });
             await newUserList.save();
             return res.status(201).json({ message: 'Manga added to the list successfully.' });
@@ -29,6 +32,7 @@ const añadirMangaALista = async (req, res) => {
         if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToRead' && lista !== 'dropped') {
             return res.status(400).json({ error: 'Invalid list name provided.' });
         }
+        
         const listaMap = {
             completado: 'mangaCompletado',
             enProgreso: 'mangaEnProgreso',
@@ -36,12 +40,12 @@ const añadirMangaALista = async (req, res) => {
             dropped: 'mangaDropped'
         };
         const listaKey = listaMap[lista];
-        if (userList[listaKey].some(manga => manga.mangaid === mangaId)) {
+        if (userList[listaKey].some(manga => manga.mangaid === Number(mangaId))) {
             return res.status(400).json({ error: 'Manga already exists in the specified list.' });
         }
         
         userList[listaKey].push({
-            mangaid: mangaId,
+            mangaid: Number(mangaId),
             mangaTitle,
             mangaCoverImage
         });
