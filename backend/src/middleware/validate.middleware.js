@@ -13,13 +13,4 @@ const validarToken = (req, res, next) => {
     }
     next();
 };
-
-const autorizarAccion = (req, res, next) => {
-    const user = req.user;
-    const listaUser = req.params.userId || req.body.userId;
-    if (user.id !== listaUser) {
-        return res.status(403).json({ error: 'You are not authorized to perform this action.' });
-    }
-    next();
-};
 export { validarToken, autorizarAccion };
