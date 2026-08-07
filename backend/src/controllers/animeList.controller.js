@@ -42,8 +42,19 @@ const añadirAnimeALista = async (req, res) => {
             userList.animeEnProgreso.some(anime => anime.animeid === Number(animeId)) ||
             userList.animePlanToWatch.some(anime => anime.animeid === Number(animeId)) ||
             userList.animeDropped.some(anime => anime.animeid === Number(animeId))) {
-            return res.status(400).json({ error: 'Anime already exists in one of the lists.' });
+            //si esta en alguna lista, lo elimina de esa lista y lo agrega a la nueva lista
+            if(userList.animeCompletado.some(anime => anime.animeid === Number(animeId))) {
+                userList.animeCompletado = userList.animeCompletado.filter(anime => anime.animeid !== Number(animeId));
+            } else if(userList.animeEnProgreso.some(anime => anime.animeid === Number(animeId))) {
+                userList.animeEnProgreso = userList.animeEnProgreso.filter(anime => anime.animeid !== Number(animeId));
+            } else if(userList.animePlanToWatch.some(anime => anime.animeid === Number(animeId))) {
+                userList.animePlanToWatch = userList.animePlanToWatch.filter(anime => anime.animeid !== Number(animeId));
+            } else if(userList.animeDropped.some(anime => anime.animeid === Number(animeId))) {
+                userList.animeDropped = userList.animeDropped.filter(anime => anime.animeid !== Number(animeId));
+            }
+        
         }
+    
         const listaMap = {
             completado: 'animeCompletado',
             enProgreso: 'animeEnProgreso',
