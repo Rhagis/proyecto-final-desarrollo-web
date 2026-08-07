@@ -34,7 +34,12 @@ const añadirMangaALista = async (req, res) => {
             return res.status(201).json({ message: 'Manga added to the list successfully.' });
         }
         
-        
+        if(userList.mangaCompletado.some(manga => manga.mangaid === Number(mangaId)) ||
+            userList.mangaEnProgreso.some(manga => manga.mangaid === Number(mangaId)) ||
+            userList.mangaPlanToRead.some(manga => manga.mangaid === Number(mangaId)) ||
+            userList.mangaDropped.some(manga => manga.mangaid === Number(mangaId))) {
+            return res.status(400).json({ error: 'Manga already exists in one of the lists.' });
+        }
         const listaMap = {
             completado: 'mangaCompletado',
             enProgreso: 'mangaEnProgreso',

@@ -37,7 +37,13 @@ const añadirAnimeALista = async (req, res) => {
             await newUserList.save();
             return res.status(201).json({ message: 'Anime added to the list successfully.' });
         }
-        
+        //verificar que el anime no exista en alguna lista antes de agregarlo
+        if (userList.animeCompletado.some(anime => anime.animeid === Number(animeId)) ||
+            userList.animeEnProgreso.some(anime => anime.animeid === Number(animeId)) ||
+            userList.animePlanToWatch.some(anime => anime.animeid === Number(animeId)) ||
+            userList.animeDropped.some(anime => anime.animeid === Number(animeId))) {
+            return res.status(400).json({ error: 'Anime already exists in one of the lists.' });
+        }
         const listaMap = {
             completado: 'animeCompletado',
             enProgreso: 'animeEnProgreso',
@@ -91,7 +97,7 @@ const eliminarAnimeDeLista = async (req, res) => {
         if (!userList) {
             return res.status(404).json({ error: 'User list not found.' });
         }
-        
+    
         if (lista === 'completado' && !userList.animeCompletado.some(anime => anime.animeid === Number(animeId))) {
             return res.status(404).json({ error: 'Anime not found in the completed list.' });
         }
