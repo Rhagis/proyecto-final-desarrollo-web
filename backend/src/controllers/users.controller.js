@@ -11,11 +11,11 @@ export const login = async (req, res) => {
         }
         const user = await User.findOne({ username });
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(401).json({ message: 'Invalid username or password' });
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid password' });
+            return res.status(401).json({ message: 'Invalid username or password' });
         }
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '10h' });
         res.cookie('token', token, {
@@ -34,20 +34,25 @@ export const login = async (req, res) => {
 //registrar nuevo usuario
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
-    
+    if(!password || !username || !email){
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+    //validad formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Invalid email format' });
+    }
     try {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-            return res.status(400).json({ message: 'Username already in use' });
+            return res.status(409).json({ message: 'Username already in use' });
         }
         if (await User.findOne({ email })) {
-            return res.status(400).json({ message: 'Email already in use' });
+            return res.status(409).json({ message: 'Email already in use' });
         }
-        if(!password || !username || !email){
-            return res.status(400).json({ message: 'All fields are required' });
-        }
+        
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, email, password: hashedPassword });
+        const newUser = new User({ username, email: email.toLowerCase(), password: hashedPassword });
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -60,7 +65,7 @@ export const register = async (req, res) => {
 export const getProfile = async (req, res) => {
     
     try {
-        const user = await User.findById(req.userId).select('-password');
+        const user = await User.findById(req.user.userId).select('-password');
         console.log(user)
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -78,7 +83,8 @@ export const getCurrentUser = async (req, res) => {
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
     }
-    try {        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId).select('-password');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -86,7 +92,7 @@ export const getCurrentUser = async (req, res) => {
         res.status(200).json(user);
     } catch (error) {
         res.status(401).json({ message: 'Invalid token' });
-        
+        console.log(error);
     }
 };
 

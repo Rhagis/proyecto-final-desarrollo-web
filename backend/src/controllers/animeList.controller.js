@@ -11,7 +11,11 @@ const añadirAnimeALista = async (req, res) => {
     if(!listasPermitidas.includes(req.body.lista)) {
         return res.status(400).json({ error: 'Invalid list name provided.' });
     }
-    const { userId, animeId, animeTitle, animeCoverImage, lista} = req.body;
+    const {animeId, animeTitle, animeCoverImage, lista} = req.body;
+    const { userId } = req.user;
+    if(animeId < 1) {
+        return res.status(400).json({ error: 'Invalid anime ID provided.' });
+    }
     if(!userId || !animeId || !animeTitle || !animeCoverImage || !lista) {
         return res.status(400).json({ error: 'All fields are required.' });
     }
@@ -59,7 +63,7 @@ const añadirAnimeALista = async (req, res) => {
 };
 
 const obtenerListaUsuario = async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.user;
     try {
         const userList = await AnimeList.findOne({ userId });
         if (!userList) {
@@ -76,16 +80,18 @@ const eliminarAnimeDeLista = async (req, res) => {
     if(!listasPermitidas.includes(req.body.lista)) {
         return res.status(400).json({ error: 'Invalid list name provided.' });
     }
-    const { userId, animeId, lista } = req.body;
+    const { animeId, lista } = req.body;
+    const { userId } = req.user;
     //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
     try {
+        if(animeId < 1) {
+            return res.status(400).json({ error: 'Invalid anime ID provided.' });
+        }
         const userList = await AnimeList.findOne({ userId });
         if (!userList) {
             return res.status(404).json({ error: 'User list not found.' });
         }
-        if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToWatch' && lista !== 'dropped') {
-            return res.status(400).json({ error: 'Invalid list name provided.' });
-        }
+        
         if (lista === 'completado' && !userList.animeCompletado.some(anime => anime.animeid === Number(animeId))) {
             return res.status(404).json({ error: 'Anime not found in the completed list.' });
         }

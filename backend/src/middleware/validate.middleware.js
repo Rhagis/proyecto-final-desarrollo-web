@@ -13,4 +13,4 @@ const validarToken = (req, res, next) => {
     }
     next();
 };
-export { validarToken, autorizarAccion };
+export { validarToken };

@@ -11,7 +11,11 @@ const añadirMangaALista = async (req, res) => {
     if(!listasPermitidas.includes(req.body.lista)) {
         return res.status(400).json({ error: 'Invalid list name provided.' });
     }
-    const { userId, mangaId, mangaTitle, mangaCoverImage, lista} = req.body;
+    const { mangaId, mangaTitle, mangaCoverImage, lista} = req.body;
+    const { userId } = req.user;
+    if(mangaId < 1) {
+        return res.status(400).json({ error: 'Invalid manga ID provided.' });
+    }
     //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
     if(!userId || !mangaId || !mangaTitle || !mangaCoverImage || !lista) {
         return res.status(400).json({ error: 'All fields are required.' });
@@ -29,9 +33,7 @@ const añadirMangaALista = async (req, res) => {
             await newUserList.save();
             return res.status(201).json({ message: 'Manga added to the list successfully.' });
         }
-        if (lista !== 'completado' && lista !== 'enProgreso' && lista !== 'planToRead' && lista !== 'dropped') {
-            return res.status(400).json({ error: 'Invalid list name provided.' });
-        }
+        
         
         const listaMap = {
             completado: 'mangaCompletado',
@@ -58,7 +60,7 @@ const añadirMangaALista = async (req, res) => {
 };
 
 const obtenerListaUsuario = async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.user;
     try {
         const userList = await MangaList.findOne({ userId });
         if (!userList) {
@@ -72,7 +74,11 @@ const obtenerListaUsuario = async (req, res) => {
 };
 
 const eliminarMangaDeLista = async (req, res) => {
-    const { userId, mangaId, lista } = req.body;
+    const { mangaId, lista } = req.body;
+    const { userId } = req.user;
+    if (mangaId < 1) {
+        return res.status(400).json({ error: 'Invalid manga ID provided.' });
+    }
     //lista deberia esperar un string para determinar si el anime esta completado, en proceso, plan to watch o dropped
     try {
         const userList = await MangaList.findOne({ userId });

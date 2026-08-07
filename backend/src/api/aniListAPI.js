@@ -15,6 +15,45 @@ try {
                     english
                     native
                 }
+                coverImage {
+                    large
+                }
+                genres
+                averageScore
+                popularity
+          }
+        }
+    }
+    `;
+
+    const variables = {
+        page: Number(page),
+        perPage: Number(perPage)
+    };
+
+    const response = await axios.post(BASE_URL, {
+        query,
+        variables
+    });
+    return response.data;
+}
+catch(error){
+    console.error('Error fetching anime list:', error);
+    throw error;
+}
+};
+
+const getAnimeById = async (id) => {
+    try {
+        const query = `
+        query ($id: Int) {
+            Media(id: $id, type: ANIME) {
+                id
+                title {
+                    romaji
+                    english
+                    native
+                }
                 description
                 coverImage {
                     large
@@ -51,7 +90,6 @@ try {
                     }
                 }
                 staff {
-                
                     edges {
                         node {
                             name {
@@ -59,7 +97,7 @@ try {
                             }
                         }
                     }
-                    }
+                }
                 characters {
                     edges {
                         node {
@@ -71,27 +109,18 @@ try {
                 }
             }
         }
+        `;
+        const variables = { id };
+        const response = await axios.post(BASE_URL, {
+            query,
+            variables
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching anime by ID:', error);
+        throw error;
     }
-    `;
-
-    const variables = {
-        page: Number(page),
-        perPage: Number(perPage)
-    };
-
-    const response = await axios.post(BASE_URL, {
-        query,
-        variables
-    });
-    console.log(response.data);
-    return response.data;
-}
-catch(error){
-    console.error('Error fetching anime list:', error);
-    throw error;
-}
 };
-    
 const getMangaList = async (page = 1, perPage = 10) => {
     try {
         const query = `
@@ -104,60 +133,12 @@ const getMangaList = async (page = 1, perPage = 10) => {
                         english
                         native
                     }
-                    description
                     coverImage {
                         large
                     }
                     genres
                     averageScore
-                    chapters
-                    volumes
-                    status
-                    bannerImage
                     popularity
-                    startDate {
-                        year
-                        month
-                        day
-                    }
-                    endDate {
-                        year
-                        month
-                        day
-                    }
-                    relations {
-                        edges {
-                            node {
-                                id
-                                title {
-                                    romaji
-                                    english
-                                    native
-                                }
-                                coverImage {
-                                    large
-                                }
-                            }
-                        }
-                    }
-                    staff {
-                        edges {
-                            node {
-                                name {
-                                    full
-                                }
-                            }
-                        }
-                    }
-                    characters {
-                        edges {
-                            node {
-                                name {
-                                    full
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -181,4 +162,84 @@ const getMangaList = async (page = 1, perPage = 10) => {
     }
 };
 
-export { getAnimeList, getMangaList };
+const getMangaById = async (id) => {
+    try {
+        const query = `
+        query ($id: Int) {
+            Media(id: $id, type: MANGA) {
+                id
+                title {
+                    romaji
+                    english
+                    native
+                }
+                description
+                coverImage {
+                    large
+                }
+                genres
+                averageScore
+                chapters
+                volumes
+                status
+                bannerImage
+                popularity
+                startDate {
+                    year
+                    month
+                    day
+                }
+                endDate {
+                    year
+                    month
+                    day
+                }
+                relations {
+                    edges {
+                        node {
+                            id
+                            title {
+                                romaji
+                                english
+                                native
+                            }
+                            coverImage {
+                                large
+                            }
+                        }
+                    }
+                }
+                staff {
+                    edges {
+                        node {
+                            name {
+                                full
+                            }
+                        }
+                    }
+                }
+                characters {
+                    edges {
+                        node {
+                            name {
+                                full
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        `;
+        const variables = { id };
+        const response = await axios.post(BASE_URL, {
+            query,
+            variables
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching manga by ID:', error);
+        throw error;
+    }
+};
+
+export { getAnimeList, getMangaList, getAnimeById, getMangaById };
