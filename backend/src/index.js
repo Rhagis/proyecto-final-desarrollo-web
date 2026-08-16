@@ -1,4 +1,4 @@
-
+import path from 'path';
 import './config/env.js' // Import the env.js file to load environment variables
 import app from './app.js'
 import conectarDB from './config/db.js'

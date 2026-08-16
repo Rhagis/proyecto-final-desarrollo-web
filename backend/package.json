@@ -19,11 +19,11 @@
     "mongoose": "^9.6.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14",
-    "mocha": "^10.2.0",
-    "supertest": "^6.3.3",
     "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "mongodb-memory-server": "^8.11.1",
-    "sinon": "^15.0.0"
+    "nodemon": "^3.1.14",
+    "sinon": "^15.0.0",
+    "supertest": "^6.3.3"
   }
 }
