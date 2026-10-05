@@ -4,7 +4,7 @@ import { validarToken } from "../middleware/validate.middleware.js";
 
 const router = express.Router();
 
-router.get('/:userId', validarToken, obtenerListaUsuario);
+router.get('/lista', validarToken, obtenerListaUsuario);
 router.post('/add', validarToken, añadirAnimeALista);
 router.delete('/remove', validarToken, eliminarAnimeDeLista);
 
