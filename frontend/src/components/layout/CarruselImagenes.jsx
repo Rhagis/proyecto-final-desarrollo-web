@@ -26,9 +26,10 @@ function CarruselImagenes() {
     const cargarAnimes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/anime?page=1&perPage=5",
+          "http://localhost:3000/anime/banner",
         );
         setAnimes(response.data.data.Page.media);
+        console.log(animes)
       } catch (error) {
         console.error("Error al obtener los animes:", error);
       }
@@ -51,7 +52,7 @@ function CarruselImagenes() {
     <section className={styles.carrusel}>
       <div
         className={styles.carrusel_slide}
-        style={{ backgroundImage: `url(${animeActual?.coverImage?.large})` }}
+        style={{ backgroundImage: `url(${animeActual?.bannerImage})` }}
       >
         <div className={styles.carrusel_contenido}>
           <h3 className={styles.carrusel_nombre}>
@@ -63,8 +64,7 @@ function CarruselImagenes() {
           </p>
 
           <p className={styles.carrusel_descripcion}>
-            El viaje del monarca de las sombras continua. Nuevos enemigos surgen
-            desde la oscuridad.
+            {animeActual?.description}
           </p>
 
           <div className={styles.carrusel_acciones}>

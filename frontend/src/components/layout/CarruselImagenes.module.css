@@ -14,7 +14,7 @@
     border-radius: 1.5rem;
     border: 1.5px solid rgba(3, 43, 92, 0.9);
     
-    background-size: 100%;
+    background-size: 150%;
     background-position: 5% center;
 
     position: relative;
@@ -66,6 +66,12 @@
     line-height: 1.6;
     margin-bottom: 30px;
     max-width: 400px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 5;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    
 }
 
 .carrusel_acciones {

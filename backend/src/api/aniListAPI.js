@@ -43,6 +43,42 @@ catch(error){
 }
 };
 
+const getAnimeBanner = async (page = 1, perPage = 10) => {
+    try {
+        const query = `
+        query ($page: Int, $perPage: Int) {
+            Page(page: $page, perPage: $perPage) {
+                media(type: ANIME) {
+                    id
+                    title {
+                        romaji
+                        english
+                        native
+                    }
+                    bannerImage
+                    genres
+                    description
+                }
+            }
+        }
+        `;
+
+        const variables = {
+            page: Number(page),
+            perPage: Number(perPage)
+        };
+
+        const response = await axios.post(BASE_URL, {
+            query,
+            variables
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching anime banner:', error);
+        throw error;
+    }
+};
+
 const getAnimeById = async (id) => {
     try {
         const query = `
@@ -242,4 +278,4 @@ const getMangaById = async (id) => {
     }
 };
 
-export { getAnimeList, getMangaList, getAnimeById, getMangaById };
+export { getAnimeList, getAnimeBanner, getMangaList, getAnimeById, getMangaById };

@@ -1,4 +1,4 @@
-import { getAnimeList, getAnimeById } from '../api/aniListAPI.js';
+import { getAnimeList, getAnimeById, getAnimeBanner } from '../api/aniListAPI.js';
 
 const obtenerAnimes = async (req, res) => {
     try {
@@ -18,6 +18,19 @@ const obtenerAnimes = async (req, res) => {
     
 };
 
+const obtenerAnimeBanner = async (req, res) => {
+    try {
+        const banner = await getAnimeBanner();
+        if (!banner) {
+            return res.status(404).json({ error: 'No anime banner found' });
+        }
+        res.status(200).json(banner);
+    } catch (error) {
+        console.error('Error fetching anime banner:', error);
+        res.status(500).json({ error: 'An error occurred while fetching the anime banner.' });
+    }
+};
+
 const obtenerAnimePorId = async (req, res) => {
     const { id } = req.params;
     try {
@@ -34,4 +47,4 @@ const obtenerAnimePorId = async (req, res) => {
     }
 };
 
-export { obtenerAnimes, obtenerAnimePorId };
+export { obtenerAnimes, obtenerAnimePorId, obtenerAnimeBanner };
