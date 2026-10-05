@@ -1,0 +1,143 @@
+.carrusel {
+    width: 100%;
+}
+
+.carrusel_slide {
+    min-height: 380px;
+    
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+
+    padding: 40px 60px;
+
+    border-radius: 1.5rem;
+    border: 1.5px solid rgba(3, 43, 92, 0.9);
+    
+    background-size: 100%;
+    background-position: 5% center;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.carrusel_slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.95)20%,
+        rgba(0, 0, 0, 0.75)40%,
+        rgba(0, 0, 0, 0.35)60%,
+        rgba(0, 0, 0, 0)75%
+    );
+
+    z-index: 1;
+}
+
+.carrusel_contenido {
+    max-width: 600px;
+    text-align: left;
+    color: white;
+
+    position: relative;
+    z-index: 2;
+}
+
+.carrusel_nombre {
+    font-size: 48px;
+    margin: 0 0 10px;
+    display: -webkit-box;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.carrusel_subtitulo {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.carrusel_descripcion {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 400px;
+}
+
+.carrusel_acciones {
+    display: flex;
+    gap: 15px;
+}
+
+.carrusel_acciones button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+
+    height: 40px;
+
+    font-size: 15px;
+    font-weight: 600;
+    border: 1.5px solid rgba(3, 43, 92, 0.9);
+
+    cursor: pointer;
+
+    transition: 
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.carrusel_acciones button:first-child {
+    color: white;
+
+}
+
+.carrusel_acciones button:last-child {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    
+}
+
+.carrusel_acciones button:hover {
+    transform: translateY(-2px);
+}
+
+.carrusel_acciones button:first-child:hover {
+    background-color: #f0e6ff;
+    color: black;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+.carrusel_acciones button:last-child:hover {
+    background-color: rgba(255, 255, 255, 0.22);
+
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
+.carrusel_anterior,
+.carrusel_siguiete {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 3;
+    border-radius: 50%;
+    border: 1.5px solid rgba(3, 43, 92, 0.9);
+
+}
+.carrusel_anterior {
+    left: 10px;
+}
+.carrusel_siguiete {
+    right: 10px;
+}
