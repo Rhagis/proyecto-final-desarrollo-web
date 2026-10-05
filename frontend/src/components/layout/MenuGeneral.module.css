@@ -1,0 +1,122 @@
+.menu {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: calc(100vh - 2rem);
+  margin: 1rem 0.75rem 1rem 1rem;
+  padding: 1.5rem 1rem;
+  background: linear-gradient(90deg, hsl(228, 40%, 20%) 0%, hsl(228, 48%, 12%) 100%);
+  border: 1.5px solid rgba(3, 43, 92, 0.9);
+  border-radius: 1.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.7rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-glow));
+  box-shadow: var(--shadow-glow);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.nav,
+.userSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.link,
+.userLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  color: currentColor;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.link:hover,
+.userLink:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+}
+
+.active {
+  background: rgba(165, 96, 255, 0.18);
+  color: var(--color-text);
+  box-shadow: inset 0 0 0 1px rgba(189, 123, 255, 0.2);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  margin: 0.5rem 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.userSection {
+  padding-top: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    position: static;
+    min-height: auto;
+    width: calc(100% - 1.5rem);
+    margin: 1rem auto 0;
+    border-right: 1.5px solid rgba(96, 165, 250, 0.9);
+    border-bottom: 1.5px solid rgba(96, 165, 250, 0.9);
+  }
+
+  .nav,
+  .userSection {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .link,
+  .userLink {
+    flex: 1 1 140px;
+  }
+}
