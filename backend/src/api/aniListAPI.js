@@ -43,6 +43,38 @@ const getNextSeason = () => {
             };
         };
 
+const currentSeason = () => {
+    const fecha = new Date();
+    const mes = fecha.getMonth() + 1;
+    const año = fecha.getFullYear();
+
+    if (mes >= 1 && mes <= 3) {
+        return {
+            season: 'WINTER',
+            year: año
+        };
+    }
+
+    if (mes >= 4 && mes <= 6) {
+        return {
+            season: 'SPRING',
+            year: año
+        };
+    }
+
+    if (mes >= 7 && mes <= 9) {
+        return {
+            season: 'SUMMER',
+            year: año
+        };
+    }
+
+    return {
+        season: 'FALL',
+        year: año
+    };
+};
+
 const getAnimeList = async (page = 1, perPage = 10) => {
 try {
     const query = `
@@ -128,6 +160,51 @@ const getAnimeBanner = async (page = 1, perPage = 5) => {
         return response.data;
     } catch (error) {
         console.error('Error fetching anime banner:', error);
+        throw error;
+    }
+};
+
+const getAnimeCurrentSeason = async (page = 1, perPage = 50) => {
+    const { season, year } = currentSeason();
+    try {
+        const query = `
+        query ($page: Int, $perPage: Int,$season:MediaSeason, $seasonYear: Int) {
+            Page(page: $page, perPage: $perPage) {
+                media(type: ANIME
+                        sort: POPULARITY_DESC
+                        season: $season
+                        seasonYear: $seasonYear
+                        ) {
+                    id
+                    title {
+                        romaji
+                        english
+                        native
+                    }
+                    coverImage {
+                        large
+                    }
+                    season
+                    seasonYear
+                }
+            }
+        }
+        `;
+
+        const variables = {
+            page: Number(page),
+            perPage: Number(perPage),
+            season,
+            seasonYear: year
+        };
+
+        const response = await axios.post(BASE_URL, {
+            query,
+            variables
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching anime current season:', error);
         throw error;
     }
 };
@@ -331,4 +408,4 @@ const getMangaById = async (id) => {
     }
 };
 
-export { getAnimeList, getAnimeBanner, getMangaList, getAnimeById, getMangaById };
+export { getAnimeList, getAnimeBanner, getAnimeCurrentSeason, getMangaList, getAnimeById, getMangaById };
