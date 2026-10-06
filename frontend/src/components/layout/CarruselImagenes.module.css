@@ -1,9 +1,11 @@
 .carrusel {
     width: 100%;
+    
 }
 
 .carrusel_slide {
     min-height: 380px;
+    max-height: 450px;
     
     display: flex;
     align-items: flex-end;
@@ -14,13 +16,17 @@
     border-radius: 1.5rem;
     border: 1.5px solid rgba(3, 43, 92, 0.9);
     
-    background-size: 150%;
+    background-size: 100%;
     background-position: 5% center;
 
     position: relative;
     overflow: hidden;
 }
 
+.carrusel_encabezado {
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
 .carrusel_slide::before {
     content: "";
     position: absolute;
@@ -68,8 +74,8 @@
     max-width: 400px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    line-clamp: 5;
-    -webkit-line-clamp: 5;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
     overflow: hidden;
     
 }

@@ -52,21 +52,25 @@ function CarruselImagenes() {
     <section className={styles.carrusel}>
       <div
         className={styles.carrusel_slide}
-        style={{ backgroundImage: `url(${animeActual?.bannerImage})` }}
+        style={{ backgroundImage: animeActual?.bannerImage ? `url(${animeActual?.bannerImage})` : `url(${animeActual?.coverImage?.large})` }}
       >
         <div className={styles.carrusel_contenido}>
+          <div className={styles.carrusel_encabezado}>
           <h3 className={styles.carrusel_nombre}>
-            {animeActual?.title?.english}
+            {animeActual?.title?.romaji}
           </h3>
 
           <p className={styles.carrusel_subtitulo}>
+            Temporada: {animeActual?.season} {animeActual?.seasonYear}
+          </p>
+          <p className={styles.carrusel_subtitulo}>
             {animeActual?.genres?.join(", ")}
           </p>
-
+            
           <p className={styles.carrusel_descripcion}>
             {animeActual?.description}
           </p>
-
+          </div>
           <div className={styles.carrusel_acciones}>
             <button className="btn btn-primary">Ver Ahora</button>
             <button className="btn btn-ghost">Agregar a lista</button>
