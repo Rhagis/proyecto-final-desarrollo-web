@@ -186,6 +186,8 @@ const getAnimeCurrentSeason = async (page = 1, perPage = 50) => {
                     }
                     season
                     seasonYear
+                    popularity
+                    averageScore
                 }
             }
         }

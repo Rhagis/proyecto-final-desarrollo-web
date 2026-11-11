@@ -1,0 +1,22 @@
+.main {
+  text-align: "left";
+}
+
+.titulo {
+  color: white;
+  margin: 5px;
+  margin-top: 15px;
+}
+
+.verTodo {
+  display: block;
+  width: fit-content;
+  margin: 15px 5px 5px 0;
+  color: white;
+}
+
+.linea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

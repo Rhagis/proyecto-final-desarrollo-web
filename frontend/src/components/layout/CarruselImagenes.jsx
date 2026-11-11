@@ -5,6 +5,7 @@ import axios from "axios";
 function CarruselImagenes() {
   const [animes, setAnimes] = useState([]);
   const [indiceActual, setIndiceActual] = useState(0);
+  const [animeConBanner, setAnimeConBanner] = useState([]);
 
   const animeActual = animes[indiceActual];
 
@@ -56,6 +57,7 @@ function CarruselImagenes() {
       >
         <div className={styles.carrusel_contenido}>
           <div className={styles.carrusel_encabezado}>
+          
           <h3 className={styles.carrusel_nombre}>
             {animeActual?.title?.romaji}
           </h3>
@@ -66,10 +68,10 @@ function CarruselImagenes() {
           <p className={styles.carrusel_subtitulo}>
             {animeActual?.genres?.join(", ")}
           </p>
-            
+          {/*
           <p className={styles.carrusel_descripcion}>
             {animeActual?.description}
-          </p>
+          </p>* */}
           </div>
           <div className={styles.carrusel_acciones}>
             <button className="btn btn-primary">Ver Ahora</button>

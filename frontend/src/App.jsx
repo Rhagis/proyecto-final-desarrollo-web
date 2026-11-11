@@ -8,6 +8,7 @@ import RegisterForm from "./components/auth/RegisterForm";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registro from "./pages/Register";
+import AnimeDetail from "./pages/AnimeDetail";
 
 function App() {
   const [modalType, setModalType] = useState(null);
@@ -44,6 +45,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/busqueda" element={<div className="section"><h1>Busqueda</h1><p>Página de búsqueda.</p></div>} />
               <Route path="/anime" element={<div className="section"><h1>Anime</h1><p>Listado de anime.</p></div>} />
+              <Route path="/anime/:id" element={<AnimeDetail />} />
               <Route path="/manga" element={<div className="section"><h1>Manga</h1><p>Listado de manga.</p></div>} />
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Registro />} />

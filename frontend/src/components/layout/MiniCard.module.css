@@ -1,0 +1,73 @@
+.minicard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: clamp(12px, 2vw, 24px);
+  box-sizing: border-box;
+}
+
+.minicard_slide {
+  display: flex;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  aspect-ratio: 2 / 3;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  border: 2.5px solid rgba(3, 43, 92, 0.9);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.minicard_slide:hover,
+.minicard_slide:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(90, 160, 255, 0.95);
+}
+
+.minicard_slide:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.minicard_slide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent 70%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.minicard_contenido {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  color: white;
+}
+
+.minicard_nombre {
+  font-size: 12px;
+  margin: 0 0 8px;
+  text-align: left;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.minicard_valoracion {
+  margin: 0;
+  text-align: left;
+  font-size: 15px;
+}

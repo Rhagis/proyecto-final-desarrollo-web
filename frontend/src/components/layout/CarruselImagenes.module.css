@@ -1,11 +1,9 @@
 .carrusel {
-    width: 100%;
-    
+    width: 100%;   
 }
 
 .carrusel_slide {
-    min-height: 380px;
-    max-height: 500px;
+    height: 350px;
     
     display: flex;
     align-items: flex-end;
@@ -16,7 +14,7 @@
     border-radius: 1.5rem;
     border: 1.5px solid rgba(3, 43, 92, 0.9);
     
-    background-size: 100%;
+    background-size: 50%;
     background-position: 5% center;
 
     position: relative;
@@ -24,7 +22,7 @@
 }
 
 .carrusel_encabezado {
-    margin-top: 20px;
+    margin-top: 25px;
     margin-bottom: 20px;
 }
 .carrusel_slide::before {
@@ -53,11 +51,11 @@
 }
 
 .carrusel_nombre {
-    font-size: 48px;
-    margin: 0 0 10px;
+    font-size: 40px;
+    margin: 0 0 20px;
     display: -webkit-box;
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -74,8 +72,8 @@
     max-width: 400px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
     overflow: hidden;
     
 }
